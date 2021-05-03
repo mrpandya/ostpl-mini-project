@@ -35,7 +35,10 @@ class MessageSender:
         :param contact: name of contact
         """
         try:
-            wait = WebDriverWait(self.driver, 6)
+            wait = WebDriverWait(self.driver, 160)
+            x_arg_2 = constants.SEARCH_TITLE_X_ARG
+            search_title = wait.until(EC.presence_of_element_located((By.XPATH,x_arg_2)))
+            search_title.send_keys(contact)
             x_arg = constants.GET_TITLE_QUERY.format(contact)
             return wait.until(EC.presence_of_element_located((By.XPATH, x_arg)))
         except Exception as error:
@@ -60,9 +63,11 @@ class MessageSender:
         :params contacts : list of contacts to send messages, message : string to send
         """
         self.driver.get("https://web.whatsapp.com")
+        print(contacts)
         for contact in contacts:
             contact_title = MessageSender.get_contact_title(self,contact)
             if contact_title == None:
+                print(contact)
                 continue
             contact_title.click()
             MessageSender.type_message(self,message)

@@ -1,6 +1,7 @@
 from whatsapp_sender.sender import MessageSender as ms
 import tkinter as tk
 from tkinter import messagebox
+import emoji
 
 def filter_contact_names(contacts:str):
     '''
@@ -23,7 +24,7 @@ def check_string(string:str):
 def check_data(contacts:str,message:str):
 
     for label in window.grid_slaves():
-      if int(label.grid_info()["column"]) == 2:
+      if int(label.grid_info()["column"]) == 2 and int(label.grid_info()["row"])<2:
            label.grid_forget()
 
     if not check_string(contacts):
@@ -43,11 +44,22 @@ def send_message(contacts:str,message:str):
         return False
     object = ms(browser="firefox")
     contacts = filter_contact_names(contacts)
-    if object.send_messages(contacts,message):
-        messagebox.showinfo("Success",  "Your Messages have been sent to "+' '.join(contacts))
+    print(emoji.emojize(message))
+    if object.send_messages(contacts,emoji.emojize(message)):
+        messagebox.Dialog("Success",  "Your Messages have been sent to "+' '.join(contacts))
         window.destroy()
 
+def preview_message(contacts:list,message:str):
+    if not check_data(contacts,message):
+        return False
+    message = emoji.emojize(message)
+    # preview_message=tk.Message(window,text=message)
+    # preview_message.config(bg='floral white')
+    # preview_message.grid(row=1,column=2)
+    messagebox.showinfo("Preview",str(message))
+    return True
 
+# def main():
 window = tk.Tk()
 window.title('Whatsapp Sender')
 tk.Label(window, text='Contacts').grid(row=0)
@@ -57,8 +69,9 @@ e2 = tk.Entry(window)
 e1.grid(row=0, column=1)
 e2.grid(row=1, column=1)
 button = tk.Button(window, text='Send', width=25, command=lambda:send_message(e1.get(),e2.get()))
+preview = tk.Button(window, text='Preview', width=25, command=lambda:preview_message(e1.get(),e2.get()))
 button.grid(row=2, column=1)
-# button = tk.Button(window, text='Send', width=25, command=window.destroy)
+preview.grid(row=2, column=2)
 window.mainloop()
 
-# Hello Bitch, I am just testing my python project feel free to ignore this message but dare you ignore me
+# Blank1,Blank2,Blank3,Blank4,Blank5,Blank6
