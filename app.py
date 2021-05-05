@@ -46,7 +46,7 @@ def send_message(contacts:str,message:str):
     contacts = filter_contact_names(contacts)
     print(emoji.emojize(message))
     if object.send_messages(contacts,emoji.emojize(message)):
-        messagebox.Dialog("Success",  "Your Messages have been sent to "+' '.join(contacts))
+        messagebox.showinfo("Success", str("Your Messages have been sent to "+' '.join(contacts)))
         window.destroy()
 
 def preview_message(contacts:list,message:str):
